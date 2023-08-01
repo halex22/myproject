@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .forms import ArtistForm
+from .forms import ArtistForm, AlbumForm
 from .models import Artist
 
 
@@ -21,3 +21,13 @@ def add_artist(request):
         form = ArtistForm()
     context = {"form": form}
     return render(request, "add_artist.html", context=context)
+
+def add_album(request):
+    if request.method == "POST":
+        form = AlbumForm(request.POST)
+        if form.is_valid():
+            print(form)
+    else:
+        form = AlbumForm()
+    context = {"form": form}
+    return render(request, "add_album.html", context=context)

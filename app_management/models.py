@@ -32,6 +32,7 @@ class Album(models.Model):
     """
     name = models.CharField(max_length=50)
     released_date = models.DateField()
+    added_date = models.DateField(default=timezone.now)
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE, related_name='albums')
     
     def __str__(self) -> str:
