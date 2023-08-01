@@ -1,4 +1,6 @@
-from django.shortcuts import render
+from typing import Any
+from django.shortcuts import render, HttpResponse
+from django.views import View
 from .forms import ArtistForm, AlbumForm
 from .models import Artist
 
@@ -6,28 +8,40 @@ from .models import Artist
 def home(request):
     return render(request, "index.html")
 
+class AddArtist(View):
 
-def add_artist(request):
-    if request.method == "POST":
-        form = ArtistForm(request.POST)
+    def __init__(self, **kwargs: Any):
+        super().__init__(**kwargs)
+        self.tp = "add_artist.html"
+        self.form = ArtistForm
+        self.artist = Artist
+
+    def create_new_entry(self, cleaned_data) -> object:
+        artist = self.artist(
+            name=cleaned_data["artist_name"],
+            genre=cleaned_data["genre"],
+            fundation_date=cleaned_data["fundation_date"]
+        )
+        return artist
+
+    def get(self, request):
+        return render(request, self.tp, {"form":self.form()})
+    
+    def post(self, request):
+        form = self.form(request.POST)
+        print(self.form)
         if form.is_valid():
-            artist = Artist(
-                name= form.cleaned_data["artist_name"],
-                genre= form.cleaned_data["genre"],
-                fundation_date= form.cleaned_data["fundation_date"]
-            )
-            artist.save()            
-    else:
-        form = ArtistForm()
-    context = {"form": form}
-    return render(request, "add_artist.html", context=context)
+            new_artist = self.create_new_entry(form.cleaned_data)
+            return HttpResponse("<h1>Well done</h1>")
 
-def add_album(request):
-    if request.method == "POST":
+
+class AddAlbum(View):
+
+    def get(self, request):
+        form = AlbumForm()
+        return render(request, "add_album.html", {"form": form})
+    
+    def post(self, request):
         form = AlbumForm(request.POST)
         if form.is_valid():
-            print(form)
-    else:
-        form = AlbumForm()
-    context = {"form": form}
-    return render(request, "add_album.html", context=context)
+            return HttpResponse("<h1>Well done</h1>")
