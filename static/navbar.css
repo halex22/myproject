@@ -1,0 +1,28 @@
+.nav-links ul {
+    list-style-type: none;
+
+}
+
+i {
+    color: #ffffff;
+}
+
+.nav-links li {
+    display: inline;
+    margin: 0 2rem;
+    color: white;
+}
+
+nav {
+    background-color: black;
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.site-name {
+    color: white;
+    align-items: center;
+    margin-left: 1rem;
+}
