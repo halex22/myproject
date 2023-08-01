@@ -7,13 +7,15 @@
 }
 
 .mouse-over-input {
-    border: solid 3px rgb(188, 188, 253);
+    border: solid 3px rgb(95, 95, 245);
 }
 
 input {
     border-radius: 5px;
     border: solid 2px black;
+    margin-top: 0.5rem;
 }
+
 .invalid input {
     border-color: brown;
     border: solid 2px brown;

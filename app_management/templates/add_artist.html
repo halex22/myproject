@@ -19,7 +19,7 @@
             {% csrf_token %}
             {% for field in form %}
                 <div class="input-container {% if field.errors %}invalid{% endif %}">
-                    {{field.label}} <br>
+                    {{field.label_tag}} <br>
                     {{field}}                  
                     {{field.errors}}               
                 </div>
