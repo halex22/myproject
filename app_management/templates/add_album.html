@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block css_file %}
+    <link rel="stylesheet" href="{% static 'app_management/css/add_album.css' %}">
+{% endblock css_file %}
 
 {% block title %}Add album{% endblock title %}
 
@@ -10,7 +15,13 @@
     <div class="form-container">
         <form method="post">
             {% csrf_token %}
-            {{form}}
+            {% for field in form %}
+            <div class="field-container {% if field.errors %}invalid{% endif %}">
+                {{field.label_tag}}
+                {{field}}
+                {{field.errors}}
+            </div>
+            {% endfor %}
             <button type="submit">add</button>
         </form>
     </div>

@@ -44,5 +44,5 @@ def artist_pre_save(sender, instance, **kwargs):
     instance.genre = instance.genre.lower()
 
 @receiver(models.signals.pre_save, sender=Album)
-def artist_pre_save(sender, instance, **kwargs):
+def album_pre_save(sender, instance, **kwargs):
     instance.name = instance.name.lower()

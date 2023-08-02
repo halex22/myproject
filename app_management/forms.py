@@ -1,9 +1,11 @@
-from django.forms import Form, TextInput, NumberInput, Select
+from django.forms import Form, NumberInput, ModelForm
+from django.forms.widgets import TextInput, Select, SelectDateWidget, Input
 from django.forms import CharField, IntegerField, ModelChoiceField, ModelMultipleChoiceField
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 from datetime import datetime
-from .models import Artist
+from .models import Artist, Album
+
 
 length_validatos = [MinLengthValidator(limit_value=2, message="Name is too short"),
         MaxLengthValidator(limit_value=50,  message="Name is too long")]
@@ -30,3 +32,29 @@ class AlbumForm(Form):
     artist = ModelChoiceField(label="Artist", queryset=artist_choices,
                               widget=Select(attrs={"class":"input"}))
     
+
+class NewForm(ModelForm):
+
+    class Meta:
+        model = Album
+        # fields = "__all__"
+        exclude = ["added_date"]
+        labels = {
+            "name":"Name of the album"
+        }
+        widgets = {
+            "name": TextInput(attrs={"class":"form-element"}),
+            "released_date": Input(
+                attrs={
+                    "class":"form-element",
+                    "type": "date"
+                },
+            ),
+            "artist": Select(attrs={"class":"form-element artist"})
+        }
+        error_messages = {
+            "album_name": {
+                "required": "album name can not be empty"
+            }
+        }
+        

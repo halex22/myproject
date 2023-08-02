@@ -1,8 +1,9 @@
 from typing import Any
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, HttpResponseRedirect
 from django.views import View
-from .forms import ArtistForm, AlbumForm
-from .models import Artist
+from django.views.generic.edit import CreateView
+from .forms import ArtistForm, AlbumForm, NewForm
+from .models import Artist, Album
 
 
 def home(request):
@@ -45,3 +46,12 @@ class AddAlbum(View):
         form = AlbumForm(request.POST)
         if form.is_valid():
             return HttpResponse("<h1>Well done</h1>")
+        
+
+class NewAlbumView(CreateView):
+    template_name = "add_album.html"
+    form_class = NewForm
+    model = Album
+
+    def get_success_url(self):
+        pass
