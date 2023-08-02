@@ -9,6 +9,7 @@ from .models import Artist, Album
 def home(request):
     return render(request, "index.html")
 
+
 class AddArtist(View):
 
     def __init__(self, **kwargs: Any):
@@ -26,8 +27,8 @@ class AddArtist(View):
         return artist
 
     def get(self, request):
-        return render(request, self.tp, {"form":self.form()})
-    
+        return render(request, self.tp, {"form": self.form()})
+
     def post(self, request):
         form = self.form(request.POST)
         print(self.form)
@@ -41,12 +42,12 @@ class AddAlbum(View):
     def get(self, request):
         form = AlbumForm()
         return render(request, "add_album.html", {"form": form})
-    
+
     def post(self, request):
         form = AlbumForm(request.POST)
         if form.is_valid():
             return HttpResponse("<h1>Well done</h1>")
-        
+
 
 class NewAlbumView(CreateView):
     template_name = "add_album.html"
