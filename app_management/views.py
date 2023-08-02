@@ -2,12 +2,19 @@ from typing import Any
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect
 from django.views import View
 from django.views.generic.edit import CreateView
+from django.views.generic import TemplateView
 from .forms import ArtistForm, AlbumForm, NewForm
 from .models import Artist, Album
 
 
-def home(request):
-    return render(request, "index.html")
+class HomeView(TemplateView):
+    template_name = "index.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # context["msg"] = "This works !" # to add new context data
+        return context
+    
 
 
 class AddArtist(View):
@@ -34,6 +41,7 @@ class AddArtist(View):
         print(self.form)
         if form.is_valid():
             new_artist = self.create_new_entry(form.cleaned_data)
+            new_artist.save()
             return HttpResponse("<h1>Well done</h1>")
 
 
@@ -56,3 +64,4 @@ class NewAlbumView(CreateView):
 
     def get_success_url(self):
         pass
+   

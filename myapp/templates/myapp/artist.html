@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}{{artist.name}}{% endblock title %}
+
+{% block content %}
+    <div class="main-container">
+        <div class="artist-element">
+            <div class="artist-name">
+                {{artist.name|title}}
+            </div>
+            <div class="artist-img">
+                <img src="" alt="{{artist.name}} img">
+            </div>
+        </div>
+    </div>
+{% endblock content %}
