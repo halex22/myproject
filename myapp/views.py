@@ -1,4 +1,3 @@
-"""Django imports"""
 from django.shortcuts import render
 from django.views.generic import TemplateView, DetailView, ListView
 from app_management.models import Album, Artist
