@@ -8,7 +8,7 @@ class Profile(Model):
     Profile model class
     Params: name and profile_pic
     """
-    name = CharField(name="Profile name", unique=True, blank=False, validators=[
+    name = CharField(unique=True, blank=False, validators=[
         MinLengthValidator(
             limit_value=6,
             message="Username is too short, add at least %(limit_value)d characters"
