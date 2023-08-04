@@ -1,0 +1,17 @@
+.form-container {
+    margin: 0 20% ;
+    line-height: 1rem;
+    border: 3px solid rgb(208, 208, 208);
+    border-radius: 10px;
+    padding: 2rem;
+}
+
+/* form {
+    display: flex;
+    flex-direction: column;
+} */
+
+button {
+    margin: 1rem 0;
+    border-radius: 5px;
+}

@@ -5,19 +5,41 @@
     }
 </style>
 <nav>
-    <div class="name-logo">
-        <a href="{% url 'home' %}">
+    <div class="name-logo container-fluid">
+        <a href="{% url 'home' %}" class="navbar-brand">
             <i class="fa-solid fa-house">
-                <span class="site-name">Music world</span>
+                <span class="site-name">Metal world</span>
             </i>
         </a>
     </div>
-    <div class="nav-links">
-        <ul>
-            <li><a href="{% url 'albums' %}"><i class="fa-solid fa-record-vinyl"><span>Albums</span></i></a></li>
-            <li><a href="{% url 'artists' %}"><i class="fa-solid fa-people-group"><span>Artist</span></i></a></li>
-            <li><a href="{% url 'sign-up' %}">Sign Up</a></li>
-            <li>Log In</li>
+    <div class="nav-links"  class="collapse navbar-collapse">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a href="{% url 'albums' %}">
+                    <i class="fa-solid fa-record-vinyl">
+                        <span class="nav-element">Albums</span>
+                    </i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'artists' %}">
+                    <i class="fa-solid fa-people-group">
+                        <span class="nav-element">Artists</span>
+                    </i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'sign-up' %}">
+                    <i class="fa-solid fa-user-plus">
+                        <span class="nav-element">Sign Up</span>
+                    </i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <i class="fa-solid fa-right-to-bracket">
+                    <span class="nav-element">Log In</span>
+                </i>
+            </li>
         </ul>
     </div>
     

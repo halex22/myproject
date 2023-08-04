@@ -14,5 +14,9 @@ class ProfileForm(ModelForm):
             }
         }
         widgets = {
-            "name": TextInput(attrs={"class": "input-element"})
+            "name": TextInput(attrs={"class": "input-element form-control"})
+        }
+        labels = {
+            "name": "Username",
+            "profile_pic": "Profile Picture"
         }
