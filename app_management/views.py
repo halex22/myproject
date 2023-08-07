@@ -3,7 +3,7 @@ from django.shortcuts import render, HttpResponse, HttpResponseRedirect
 from django.views import View
 from django.views.generic.edit import CreateView
 from django.views.generic import TemplateView
-from .forms import ArtistForm, AlbumForm, NewForm
+from .forms import ArtistForm, AlbumForm, NewForm, NewArtistForm
 from .models import Artist, Album
 
 
@@ -29,7 +29,9 @@ class AddArtist(View):
         artist = self.artist(
             name=cleaned_data["artist_name"],
             genre=cleaned_data["genre"],
-            fundation_date=cleaned_data["fundation_date"]
+            fundation_date=cleaned_data["fundation_date"],
+            img=cleaned_data["img"],
+            subgenres=cleaned_data["subgenres"]
         )
         return artist
 
@@ -38,7 +40,7 @@ class AddArtist(View):
 
     def post(self, request):
         form = self.form(request.POST)
-        print(self.form)
+        print(self.form.cleaned_data)
         if form.is_valid():
             new_artist = self.create_new_entry(form.cleaned_data)
             new_artist.save()
@@ -65,3 +67,8 @@ class NewAlbumView(CreateView):
     def get_success_url(self):
         pass
    
+class NewArtistView(CreateView):
+    template_name = "add_artist.html"
+    model = Artist
+    form_class = NewArtistForm
+    success_url = "/home-management"

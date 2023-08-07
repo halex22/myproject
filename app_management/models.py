@@ -22,6 +22,8 @@ class Artist(models.Model):
             message=f"Can't enter a higher than the current year"
         )
     ], null=True, blank=True)
+    img = models.ImageField(upload_to="images", blank=True, null=True)
+    subgenres = models.JSONField(null=True)
 
     def __str__(self):
         return self.name

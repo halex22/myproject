@@ -13,7 +13,7 @@
                     <h3><a href="{% url 'artist' pk=artist.id %}">{{artist.name|title}}</a></h3>
                 </div>
                 <div class="artist-img">
-                    <img src="" alt="{{artist.name}} img">
+                    <img src="{{artist.img}}" alt="{{artist.name}} img">
                 </div>
             </div>
         {% endfor %}

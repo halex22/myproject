@@ -15,18 +15,7 @@
         <p>Remeber to make a query to see if artist already exist.</p>
     </div>
     <div class="form-container">
-        <form method="post">
-            {% csrf_token %}
-            {% for field in form %}
-                <div class="input-container {% if field.errors %}invalid{% endif %}">
-                    {{field.label_tag}} <br>
-                    {{field}}                  
-                    {{field.errors}}               
-                </div>
-            {% endfor %}
-            <!-- <input type="text" onclick=""> -->
-            <button type="submit">Add</button>
-        </form>
+        {% include "form/multi_form.html" %}
     </div>
 </div>
 {% endblock content %}

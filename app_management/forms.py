@@ -1,9 +1,10 @@
 from django.forms import Form, NumberInput, ModelForm
-from django.forms.widgets import TextInput, Select, Input
-from django.forms import CharField, IntegerField, ModelChoiceField
+from django.forms.widgets import TextInput, Select, Input, SelectMultiple
+from django.forms import CharField, IntegerField, ModelChoiceField, ImageField, MultipleChoiceField, CheckboxSelectMultiple
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 from datetime import datetime
+from my_metal_code.subgenres import metal_subgenres
 from .models import Artist, Album
 
 length_validatos = [MinLengthValidator(limit_value=2, message="Name is too short"),
@@ -20,6 +21,12 @@ class ArtistForm(Form):
             limit_value=datetime.now().year,
             message=f"Can't enter a higher than the current year"
         )], widget=NumberInput(attrs={"class": "input"}))
+    img = ImageField()
+    subgenres = MultipleChoiceField(choices=[(genre, genre) for genre in metal_subgenres],
+                                    widget=Select(attrs={
+                                        "class": "form-select",
+                                        "multiple": True
+                                    }))
 
 
 class AlbumForm(Form):
@@ -51,10 +58,25 @@ class NewForm(ModelForm):
                     "type": "date"
                 },
             ),
-            "artist": Select(attrs={"class": "form-element artist"})
+            "artist": Select(attrs={"class": "form-element form-select"})
         }
         error_messages = {
             "album_name": {
                 "required": "album name can not be empty"
             }
+        }
+
+class NewArtistForm(ModelForm):
+
+    class Meta:
+        model = Artist
+        fields = "__all__"
+        exclude = ["added_date"]
+
+        widgets = {
+            "fundation_date": NumberInput(),
+            "subgenres": SelectMultiple(
+                attrs={"class":"form-select"},
+                choices=[(genre, genre) for genre in metal_subgenres]
+            )
         }

@@ -13,17 +13,7 @@
         <h2>add a new album</h2>
     </div>
     <div class="form-container">
-        <form method="post">
-            {% csrf_token %}
-            {% for field in form %}
-            <div class="field-container {% if field.errors %}invalid{% endif %}">
-                {{field.label_tag}}
-                {{field}}
-                {{field.errors}}
-            </div>
-            {% endfor %}
-            <button type="submit">add</button>
-        </form>
+        {% include "form/base_form.html"%}
     </div>
 </div>
 {% endblock content %}

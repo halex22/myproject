@@ -1,0 +1,7 @@
+<div class="field-container">
+    <select name="{{ field.name }}" id="{{ field.id_for_label }}" multiple class="form-select">
+		{% for value, label in choices %}
+			<option value="{{value}}">{{label}}</option>
+    	{% endfor %}
+    </select>
+</div>
