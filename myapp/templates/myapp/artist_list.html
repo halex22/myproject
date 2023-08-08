@@ -1,4 +1,8 @@
 {% extends "base.html" %}
+{% load static %}
+{% block css_file %}
+<link rel="stylesheet" href="{% static 'style.css' %}">
+{% endblock css_file %}
 
 {% block title %}Artist List{% endblock title %}
 
@@ -13,7 +17,7 @@
                     <h3><a href="{% url 'artist' pk=artist.id %}">{{artist.name|title}}</a></h3>
                 </div>
                 <div class="artist-img">
-                    <img src="{{artist.img}}" alt="{{artist.name}} img">
+                    <img src="{{artist.img.url}}" alt="{{artist.name}} img">
                 </div>
             </div>
         {% endfor %}

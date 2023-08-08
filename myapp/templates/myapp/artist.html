@@ -2,6 +2,7 @@
 {% load static %}
 {% block css_file %}
     <link rel="stylesheet" href="{% static 'artist.css' %}">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 {% endblock css_file %}
 {% block title %}{{artist.name}}{% endblock title %}
 
@@ -12,7 +13,7 @@
                 {{artist.name|title}}
             </div>
             <div class="artist-img">
-                <img src="{{artist.img}}" alt="{{artist.name}} img">
+                <img src="{{artist.img.url}}" alt="{{artist.name}} img">
             </div>
         </div>
     </div>

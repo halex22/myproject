@@ -1,5 +1,5 @@
 from django.forms import Form, NumberInput, ModelForm
-from django.forms.widgets import TextInput, Select, Input, SelectMultiple
+from django.forms.widgets import TextInput, Select, Input, SelectMultiple, ClearableFileInput
 from django.forms import CharField, IntegerField, ModelChoiceField, ImageField, MultipleChoiceField, CheckboxSelectMultiple
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.core.validators import MinLengthValidator, MaxLengthValidator
@@ -73,10 +73,18 @@ class NewArtistForm(ModelForm):
         fields = "__all__"
         exclude = ["added_date"]
 
+        labels = {
+            "name": "Band Name",
+            "genre": "Main Genre",
+            "fundation_date": "Fundation Year",
+            "img": "Band Image"
+        }
+
         widgets = {
             "fundation_date": NumberInput(),
             "subgenres": SelectMultiple(
                 attrs={"class":"form-select"},
                 choices=[(genre, genre) for genre in metal_subgenres]
-            )
+            ),
+            "img": ClearableFileInput(attrs={"accept": "image/*"}),  # Add this line for the file input
         }

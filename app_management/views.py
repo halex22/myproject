@@ -1,5 +1,5 @@
-from typing import Any
-from django.shortcuts import render, HttpResponse, HttpResponseRedirect
+
+from django.shortcuts import render, HttpResponse, redirect
 from django.views import View
 from django.views.generic.edit import CreateView
 from django.views.generic import TemplateView
@@ -19,7 +19,7 @@ class HomeView(TemplateView):
 
 class AddArtist(View):
 
-    def __init__(self, **kwargs: Any):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.tp = "add_artist.html"
         self.form = ArtistForm
@@ -71,4 +71,16 @@ class NewArtistView(CreateView):
     template_name = "add_artist.html"
     model = Artist
     form_class = NewArtistForm
-    success_url = "/home-management"
+    success_url = "/app-management"
+
+    def form_valid(self, form):
+        artist = form.save(commit=False)
+        print(self.request.POST)
+        print(self.request.FILES)
+        print(self.request)
+        if "img" in self.request.FILES:
+            artist.img = self.request.FILES['img']
+            artist.save()
+            return super().form_valid(form)
+        else:
+            redirect("add_artist", {"form":artist})
