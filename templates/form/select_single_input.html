@@ -1,0 +1,6 @@
+<select name="{{field.name}}" id="{{ field.id_for_label }}">
+    {% for choice in field.field.queryset %}
+        <option value="{{choice.pk}}">{{choice.name}}</option>
+    {% endfor %}
+</select>
+{{field.errors}}

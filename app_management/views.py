@@ -1,10 +1,14 @@
 
-from django.shortcuts import render, HttpResponse, redirect
+from typing import Any
+from django.forms.models import BaseModelForm
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic.edit import CreateView
 from django.views.generic import TemplateView
 from .forms import ArtistForm, AlbumForm, NewForm, NewArtistForm
 from .models import Artist, Album
+from my_metal_code.decorators import show_errors, handle_img_from_form
 
 
 class HomeView(TemplateView):
@@ -16,71 +20,31 @@ class HomeView(TemplateView):
         return context
     
 
-
-class AddArtist(View):
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.tp = "add_artist.html"
-        self.form = ArtistForm
-        self.artist = Artist
-
-    def create_new_entry(self, cleaned_data) -> object:
-        artist = self.artist(
-            name=cleaned_data["artist_name"],
-            genre=cleaned_data["genre"],
-            fundation_date=cleaned_data["fundation_date"],
-            img=cleaned_data["img"],
-            subgenres=cleaned_data["subgenres"]
-        )
-        return artist
-
-    def get(self, request):
-        return render(request, self.tp, {"form": self.form()})
-
-    def post(self, request):
-        form = self.form(request.POST)
-        print(self.form.cleaned_data)
-        if form.is_valid():
-            new_artist = self.create_new_entry(form.cleaned_data)
-            new_artist.save()
-            return HttpResponse("<h1>Well done</h1>")
-
-
-class AddAlbum(View):
-
-    def get(self, request):
-        form = AlbumForm()
-        return render(request, "add_album.html", {"form": form})
-
-    def post(self, request):
-        form = AlbumForm(request.POST)
-        if form.is_valid():
-            return HttpResponse("<h1>Well done</h1>")
-
-
 class NewAlbumView(CreateView):
     template_name = "add_album.html"
     form_class = NewForm
     model = Album
+    success_url = "/app-management"
 
-    def get_success_url(self):
-        pass
+    @show_errors
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+
+    @handle_img_from_form
+    def form_valid(self, form: BaseModelForm) -> HttpResponse:
+        return super().form_valid(form)
    
+
 class NewArtistView(CreateView):
     template_name = "add_artist.html"
     model = Artist
     form_class = NewArtistForm
     success_url = "/app-management"
 
-    def form_valid(self, form):
-        artist = form.save(commit=False)
-        print(self.request.POST)
-        print(self.request.FILES)
-        print(self.request)
-        if "img" in self.request.FILES:
-            artist.img = self.request.FILES['img']
-            artist.save()
-            return super().form_valid(form)
-        else:
-            redirect("add_artist", {"form":artist})
+    @show_errors
+    def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+        return super().post(request, *args, **kwargs)
+
+    @handle_img_from_form
+    def form_valid(self, form: BaseModelForm) -> HttpResponse:
+        return super().form_valid(form)

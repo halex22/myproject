@@ -10,7 +10,7 @@ class Artist(models.Model):
     The model of an artist to be added to the database
     params when using form: name, genre fundation_date
     """
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
     genre = models.CharField(max_length=25)
     added_date = models.DateField(default=timezone.now)
     fundation_date = models.IntegerField(validators=[
@@ -37,6 +37,7 @@ class Album(models.Model):
     name = models.CharField(max_length=50)
     released_date = models.DateField()
     added_date = models.DateField(default=timezone.now)
+    img = models.ImageField(upload_to="images", blank=True, null=True)
     artist = models.ForeignKey(Artist, on_delete=models.CASCADE, related_name='albums')
 
     def __str__(self) -> str:
@@ -47,6 +48,7 @@ class Album(models.Model):
 def artist_pre_save(sender, instance, **kwargs):
     instance.name = instance.name.lower()
     instance.genre = instance.genre.lower()
+    instance.subgenres = [subgenre.lower() for subgenre in instance.subgenres ]
 
 
 @receiver(models.signals.pre_save, sender=Album)

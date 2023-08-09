@@ -7,13 +7,20 @@
             {% include "form/file_input.html" %}
         {% elif  field.widget_type == "selectmultiple" %}
             {{field.label_tag}}
-            {% include "form/select_input.html" with choices=field.field.widget.choices %}
+            {% include "form/select_multi_input.html" with choices=field.field.widget.choices %}
+        {% elif field.widget_type == "select" %}
+            {% include "form/select_single_input.html" %}
         {% else %}
             {{field.label_tag}}
             {{field}}
             {{field.widget_type}}
         {% endif %}        
     {% endfor %}
-    {{field}}
-    <button class="btn btn-primary mb-3" type="submit">Create new account</button>
+    <button class="btn btn-primary mb-3" type="submit">
+        {% if submit_msg %}
+            {{submit_msg}}
+        {% else %}
+            add a costum submit message
+        {% endif %}
+    </button>
 </form>

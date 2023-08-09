@@ -1,4 +1,8 @@
+from typing import Any, Dict, Mapping, Optional, Type, Union
+from django.core.files.base import File
+from django.db.models.base import Model
 from django.forms import Form, NumberInput, ModelForm
+from django.forms.utils import ErrorList
 from django.forms.widgets import TextInput, Select, Input, SelectMultiple, ClearableFileInput
 from django.forms import CharField, IntegerField, ModelChoiceField, ImageField, MultipleChoiceField, CheckboxSelectMultiple
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -43,7 +47,10 @@ class AlbumForm(Form):
 
 
 class NewForm(ModelForm):
+    
+
     class Meta:
+        query_set = [(artist.name, artist.name) for artist in Artist.objects.all()]
         model = Album
         # fields = "__all__"
         exclude = ["added_date"]
@@ -58,7 +65,8 @@ class NewForm(ModelForm):
                     "type": "date"
                 },
             ),
-            "artist": Select(attrs={"class": "form-element form-select"})
+            "artist": Select(attrs={"class": "form-element form-select"},
+                             choices=query_set)
         }
         error_messages = {
             "album_name": {
