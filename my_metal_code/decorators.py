@@ -1,5 +1,6 @@
 from django.forms import BaseModelForm
-
+from django.http import JsonResponse, HttpRequest
+from functools import wraps
 
 def show_errors(view_method):
     """
@@ -29,4 +30,26 @@ def handle_img_from_form(view_method):
             return view_method(self, form, *args, **kwargs)
         else:
             raise AttributeError("The 'img' field is missing in the form.")
+    return decorator
+
+
+def update_session(session_name: str, query_name: str):
+    def decorator(view_func):
+        @wraps(view_func)
+        def wrapper(self,  *args, **kwargs):
+            request = self.request
+            if request.method == "POST":
+                if session_name in request.session:
+                    current_elements = request.session[session_name]
+                    new_element = request.POST[query_name]
+                    if new_element not in current_elements:
+                        current_elements.append(new_element)
+                        request.session[session_name] = current_elements 
+                        request.session.modified = True
+                else:
+                    request.session[session_name] = [request.POST[query_name]]
+                    request.session.modified = True
+                    print("new session item added.")
+            return view_func(request, *args, **kwargs)
+        return wrapper
     return decorator

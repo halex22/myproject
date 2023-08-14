@@ -4,13 +4,17 @@
     <link rel="stylesheet" href="{% static 'artist.css' %}">
     <link rel="stylesheet" href="{% static 'style.css' %}">
 {% endblock css_file %}
-{% block title %}{{artist.name}}{% endblock title %}
+{% block js_file %}
+    <script src="{% static 'ajax.js' %}"></script>
+{% endblock js_file %}
+{% block title %}{{artist.name|title}}{% endblock title %}
 
 {% block content %}
     <div class="main-container">
         <div class="artist-element">
             <div class="artist-name">
-                {{artist.name|title}}
+                <h2>{{artist.name|title}}</h2>
+                {% if is_favorite %}<h4>🤩</h4>{% endif %}                
             </div>
             <div class="artist-img">
                 <img src="{{artist.img.url}}" alt="{{artist.name}} img">
@@ -21,5 +25,11 @@
                 {% endfor %}
             </div>
         </div>
+        <form method="post" id="add-to-fav">
+            {% csrf_token %}
+            <input type="hidden" class="hidden-input" name="hidden_url" id="endpoint" value="{% url 'session-update' %}">
+            <input type="hidden" class="hidden-input" name="artsit_id" id="artist_id" value="{{artist.id}}">
+            <button type="button" id="update-session-btn" onclick="activateBtn()">Add to fav</button>
+        </form>
     </div>
 {% endblock content %}

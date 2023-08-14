@@ -1,14 +1,12 @@
-
 from typing import Any
 from django.forms.models import BaseModelForm
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render, redirect
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.views import View
 from django.views.generic.edit import CreateView
 from django.views.generic import TemplateView
-from .forms import ArtistForm, AlbumForm, NewForm, NewArtistForm
+from .forms import NewForm, NewArtistForm
 from .models import Artist, Album
-from my_metal_code.decorators import show_errors, handle_img_from_form
+from my_metal_code.decorators import show_errors, handle_img_from_form, update_session
 
 
 class HomeView(TemplateView):
@@ -48,3 +46,10 @@ class NewArtistView(CreateView):
     @handle_img_from_form
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         return super().form_valid(form)
+  
+
+class SessionUpdate(View):
+
+    @update_session(session_name="fav_artists", query_name="artist_info")
+    def post(self, request: HttpRequest , *args, **kwargs):
+        return JsonResponse({"message": "Session data updated successfully."})

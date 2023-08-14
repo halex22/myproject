@@ -1,3 +1,4 @@
+from typing import Any, Dict
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, DetailView, ListView, View
 from django.views.generic.edit import CreateView
@@ -34,6 +35,15 @@ class ArtistList(ListView):
 class SingleArtist(DetailView):
     template_name = "myapp/artist.html"
     model = Artist
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        artist = self.get_object() 
+        if "fav_artists" in self.request.session:
+            fav_artist = [int(_) for _ in self.request.session["fav_artists"]]
+            context["is_favorite"] = artist.id in fav_artist
+        return context
+
 
 class CreateProfile(CreateView):
     template_name = "myapp/sign_up.html"
