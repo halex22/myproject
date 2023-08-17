@@ -6,8 +6,16 @@
         {% elif  field.widget_type == "clearablefile" %}
             {% include "form/file_input.html" %}
         {% else %}
-        {{field}}
+            {{field.label_tag}}
+            {{field}}
+            {{field.widget_type}}
         {% endif %}
     {% endfor %}
-    <button class="btn btn-primary mb-3" type="submit">Create new account</button>
+    <button class="btn btn-primary mb-3" type="submit">
+        {% if submit_msg %}
+            {{submit_msg}}
+        {% else %}
+            add a costum submit message
+        {% endif %}
+    </button>
 </form>

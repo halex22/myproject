@@ -12,5 +12,14 @@ button {
 }
 
 img {
-    max-width: 300px;
+    max-width: 200px;
+    min-height: 300px;
+}
+
+.main-container {
+    margin: 2rem;
+}
+
+.artist-element {
+    padding: 2rem;
 }

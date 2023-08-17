@@ -49,7 +49,6 @@ def update_session(session_name: str, query_name: str):
                 else:
                     request.session[session_name] = [request.POST[query_name]]
                     request.session.modified = True
-                    print("new session item added.")
             return view_func(request, *args, **kwargs)
         return wrapper
     return decorator

@@ -1,0 +1,12 @@
+{% if user.is_authenticated %}
+    <form method="post" id="add-to-fav">
+        {% csrf_token %}
+        <input type="hidden" class="hidden-input" name="hidden_url" id="endpoint" value="{% url 'session-update' %}">
+        <input type="hidden" class="hidden-input" name="artsit_id" id="artist_id" value="{{artist.id}}">
+        {% if is_favorite %}
+            <button type="button" onclick="removeFavArtist(this)">Remove from fav</button>
+        {% else %}
+            <button type="button" id="update-session-btn" onclick="addFavArtist(this)">Add to fav</button>
+        {% endif %}
+    </form>
+{% endif %}

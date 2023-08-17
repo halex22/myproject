@@ -1,54 +1,12 @@
 from typing import Any, Dict, Mapping, Optional, Type, Union
-from django.core.files.base import File
-from django.db.models.base import Model
 from django.forms import Form, NumberInput, ModelForm
-from django.forms.utils import ErrorList
-from django.forms.widgets import TextInput, Select, Input, SelectMultiple, ClearableFileInput
-from django.forms import CharField, IntegerField, ModelChoiceField, ImageField, MultipleChoiceField, CheckboxSelectMultiple
-from django.core.validators import MinValueValidator, MaxValueValidator
-from django.core.validators import MinLengthValidator, MaxLengthValidator
-from datetime import datetime
+from django.forms.widgets import TextInput, Select, Input, SelectMultiple, ClearableFileInput, PasswordInput, EmailInput
 from my_metal_code.subgenres import metal_subgenres
 from .models import Artist, Album
-
-length_validatos = [MinLengthValidator(limit_value=2, message="Name is too short"),
-                    MaxLengthValidator(limit_value=50, message="Name is too long")]
-
-
-class ArtistForm(Form):
-    artist_name = CharField(label="artist name", validators=length_validatos,
-                            widget=TextInput(attrs={"class": "input"}))
-    genre = CharField(max_length=25, widget=TextInput(attrs={"class": "input"}))
-    fundation_date = IntegerField(validators=[
-        MinValueValidator(limit_value=1950, message="No artist before 1950"),
-        MaxValueValidator(
-            limit_value=datetime.now().year,
-            message=f"Can't enter a higher than the current year"
-        )], widget=NumberInput(attrs={"class": "input"}))
-    img = ImageField()
-    subgenres = MultipleChoiceField(choices=[(genre, genre) for genre in metal_subgenres],
-                                    widget=Select(attrs={
-                                        "class": "form-select",
-                                        "multiple": True
-                                    }))
-
-
-class AlbumForm(Form):
-    artist_choices = Artist.objects.all()
-    album_name = CharField(label="Album name", validators=length_validatos, widget=TextInput(attrs={"class": "input"}))
-    released_date = IntegerField(validators=[
-        MinValueValidator(limit_value=1950, message="No artist before 1950"),
-        MaxValueValidator(
-            limit_value=datetime.now().year,
-            message=f"Can't enter a higher than the current year"
-        )], widget=NumberInput(attrs={"class": "input"}))
-    artist = ModelChoiceField(label="Artist", queryset=artist_choices,
-                              widget=Select(attrs={"class": "input"}))
+from django.contrib.auth.models import User
 
 
 class NewForm(ModelForm):
-    
-
     class Meta:
         query_set = [(artist.name, artist.name) for artist in Artist.objects.all()]
         model = Album
@@ -74,8 +32,8 @@ class NewForm(ModelForm):
             }
         }
 
-class NewArtistForm(ModelForm):
 
+class NewArtistForm(ModelForm):
     class Meta:
         model = Artist
         fields = "__all__"
@@ -91,8 +49,28 @@ class NewArtistForm(ModelForm):
         widgets = {
             "fundation_date": NumberInput(),
             "subgenres": SelectMultiple(
-                attrs={"class":"form-select"},
+                attrs={"class": "form-select"},
                 choices=[(genre, genre) for genre in metal_subgenres]
             ),
             "img": ClearableFileInput(attrs={"accept": "image/*"}),  # Add this line for the file input
         }
+
+
+class NewUserForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ["username", "email", "password"]
+
+        widgets = {
+            "password": PasswordInput(attrs={"class": "password-field"})
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(NewUserForm, self).__init__(*args, **kwargs)
+        common_class = 'common-class'
+        for field_name, field in self.fields.items():
+            widget = field.widget
+            if 'class' in widget.attrs:
+                widget.attrs['class'] += f' {common_class}'
+            else:
+                widget.attrs['class'] = common_class

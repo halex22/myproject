@@ -1,14 +1,27 @@
 from typing import Any, Dict
-from django.shortcuts import render, redirect
+from django.core.handlers.wsgi import WSGIRequest
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import redirect
+from django.template.response import TemplateResponse
+from django.urls import reverse_lazy
 from django.views.generic import TemplateView, DetailView, ListView, View
 from django.views.generic.edit import CreateView
 from app_management.models import Album, Artist
-from .models import Profile
 from .forms import ProfileForm
+from my_metal_code.db_helper import get_fav_artists
+from django.contrib.auth.views import LoginView, LogoutView
 
-# Create your views here.
-def home(request):
-    return render(request, "myapp/index.html")
+
+class Home(TemplateView):
+    template_name = "myapp/index.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["user"] = self.request.user
+        if "fav_artists" in self.request.session:
+            context["fav_artists"] = get_fav_artists(self.request.session["fav_artists"])
+        return context
+    
 
 class AlbumsList(TemplateView):
     template_name = "myapp/album_list.html"
@@ -18,6 +31,7 @@ class AlbumsList(TemplateView):
         context["albums"] = Album.objects.all()
         return context
     
+
 class SingleAlbum(TemplateView):
     template_name = "myapp/album.html"
 
@@ -27,10 +41,12 @@ class SingleAlbum(TemplateView):
         context["album"] = selected_album
         return context
 
+
 class ArtistList(ListView):
     template_name = "myapp/artist_list.html"
     model = Artist
     context_object_name = "artists"
+
 
 class SingleArtist(DetailView):
     template_name = "myapp/artist.html"
@@ -42,23 +58,23 @@ class SingleArtist(DetailView):
         if "fav_artists" in self.request.session:
             fav_artist = [int(_) for _ in self.request.session["fav_artists"]]
             context["is_favorite"] = artist.id in fav_artist
+        context["user"] = self.request.user
         return context
-
-
-class CreateProfile(CreateView):
-    template_name = "myapp/sign_up.html"
-    form_class = ProfileForm
-    model = Profile
-    success_url = "/home"
     
-    def form_valid(self, form):
-        profile = form.save(commit=False)
-        if "profile_pic" in self.request.FILES:
-            profile.profile_pic = self.request.FILES['profile_pic']
-        profile.save()
-        return super().form_valid(form)
 
-class ProfileView(DetailView):
-    template_name = "myapp/user_profile.html"
-    model = Profile
+class Login(LoginView):
+    template_name = "myapp/registration/log_in.html"
+    redirect_authenticated_user = True
+
+    def get_redirect_url(self) -> str:
+        return reverse_lazy("home")
+
+
+class Logout(LogoutView):
+
+    def get_redirect_url(self) -> str:
+        return reverse_lazy("home")
     
+
+class UserView(DetailView):
+    pass

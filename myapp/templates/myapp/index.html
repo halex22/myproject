@@ -3,6 +3,26 @@
 {% block title %}Welcome Page{% endblock title %}
 
 {% block content %}
+  {% if user.is_authenticated %}
+  <h1>Hello {{user|title}}</h1>
+
+    {% if fav_artists %}
+    <div class="fav-artist">
+      <h3>This are your favorited artists</h3>
+      <ul>
+        {% for artist in fav_artists %}
+        <li>{{artist.name|title}}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% else %}
+    <div class="add-fav-artist">
+      <p>You don't have favorite artists yet.</p>
+    </div>
+    {% endif %}
+  {% else %}
   <h1>Hello world</h1>
+  {% endif %}
+  
   <a href="{% url 'albums' %}">Take a look at all the albums</a>
 {% endblock content %}

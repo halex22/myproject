@@ -1,4 +1,5 @@
 from typing import Any
+from django.contrib.auth.forms import UserCreationForm
 from django.forms.models import BaseModelForm
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.views import View
@@ -6,17 +7,15 @@ from django.views.generic.edit import CreateView
 from django.views.generic import TemplateView
 from .forms import NewForm, NewArtistForm
 from .models import Artist, Album
+from django.contrib.auth.models import User
 from my_metal_code.decorators import show_errors, handle_img_from_form, update_session
+from django.contrib.auth import login
+from django.urls import reverse_lazy
 
 
 class HomeView(TemplateView):
     template_name = "index.html"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # context["msg"] = "This works !" # to add new context data
-        return context
-    
 
 class NewAlbumView(CreateView):
     template_name = "add_album.html"
@@ -31,7 +30,7 @@ class NewAlbumView(CreateView):
     @handle_img_from_form
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         return super().form_valid(form)
-   
+
 
 class NewArtistView(CreateView):
     template_name = "add_artist.html"
@@ -46,10 +45,23 @@ class NewArtistView(CreateView):
     @handle_img_from_form
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         return super().form_valid(form)
-  
+
 
 class SessionUpdate(View):
 
     @update_session(session_name="fav_artists", query_name="artist_info")
-    def post(self, request: HttpRequest , *args, **kwargs):
+    def post(self, request: HttpRequest, *args, **kwargs) -> JsonResponse:
         return JsonResponse({"message": "Session data updated successfully."})
+
+
+class NewUserView(CreateView):
+    template_name = "add_user.html"
+    model = User
+    form_class = UserCreationForm
+    success_url = reverse_lazy("home")
+
+    def form_valid(self, form: BaseModelForm) -> HttpResponse:
+        response = super().form_valid(form)
+        user = form.save()
+        login(self.request, user)
+        return response

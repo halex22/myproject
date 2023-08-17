@@ -14,10 +14,10 @@
         <div class="artist-element">
             <div class="artist-name">
                 <h2>{{artist.name|title}}</h2>
-                {% if is_favorite %}<h4>🤩</h4>{% endif %}                
+                <h4>{% if is_favorite %}🤩{% endif %}</h4>            
             </div>
             <div class="artist-img">
-                <img src="{{artist.img.url}}" alt="{{artist.name}} img">
+                <img src="{{artist.img.url}}" alt="{{artist.name}} img" class="img-fluid">
             </div>
             <div class="albums-container">
                 {% for album in artist.albums.all %}
@@ -25,11 +25,8 @@
                 {% endfor %}
             </div>
         </div>
-        <form method="post" id="add-to-fav">
-            {% csrf_token %}
-            <input type="hidden" class="hidden-input" name="hidden_url" id="endpoint" value="{% url 'session-update' %}">
-            <input type="hidden" class="hidden-input" name="artsit_id" id="artist_id" value="{{artist.id}}">
-            <button type="button" id="update-session-btn" onclick="activateBtn()">Add to fav</button>
-        </form>
+    {% include "form/fav_forms/fav_artist.html" %}
+        
+
     </div>
 {% endblock content %}

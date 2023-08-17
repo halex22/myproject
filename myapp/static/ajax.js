@@ -3,7 +3,7 @@ $(document).ready(
 )
 
 
-function activateBtn() {
+function addFavArtist(x) {
     const endpointURL = $("#endpoint").val();
     const token = $("input").val();
     const artistID = $("#artist_id").val();
@@ -12,15 +12,20 @@ function activateBtn() {
     $.ajax({
         type: "POST",
         url: endpointURL,
-        headers: {
-            'X-CSRFToken': token
-        },
+        headers: {'X-CSRFToken': token},
         data: {"artist_info": artistID},
         success: (res) => {
             console.log(res);
+            $(x).hide(); // hide the clicked button 
         },
         error: (res) => {
             alert("An error acourred. Please try again.");
         }        
     })
 };
+
+
+function hideBtn(x) {
+    console.log($(x));
+    $(x).hide();
+}
