@@ -3,29 +3,32 @@ $(document).ready(
 )
 
 
-function addFavArtist(x) {
+function updateFavArtist(x, add) {
     const endpointURL = $("#endpoint").val();
     const token = $("input").val();
     const artistID = $("#artist_id").val();
-    console.log($("#artist_id").val());
+    const afterMSG  = add ? "Artist added to favorites" : "Artist remove from favorites";
+
+    const requestData = {
+        "artist_info": artistID
+    }
+
+    if (!add) {
+        requestData["delete"] = true;
+    }
     
     $.ajax({
         type: "POST",
         url: endpointURL,
         headers: {'X-CSRFToken': token},
-        data: {"artist_info": artistID},
+        data: requestData,
         success: (res) => {
             console.log(res);
-            $(x).hide(); // hide the clicked button 
+            $(x).hide(); // hide the clicked button
+            $("#after-msg").text(afterMSG);
         },
         error: (res) => {
             alert("An error acourred. Please try again.");
         }        
     })
 };
-
-
-function hideBtn(x) {
-    console.log($(x));
-    $(x).hide();
-}

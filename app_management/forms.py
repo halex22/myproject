@@ -13,7 +13,8 @@ class NewForm(ModelForm):
         # fields = "__all__"
         exclude = ["added_date"]
         labels = {
-            "name": "Name of the album"
+            "name": "Name of the album",
+            "img": "Album cover"
         }
         widgets = {
             "name": TextInput(attrs={"class": "form-element"}),

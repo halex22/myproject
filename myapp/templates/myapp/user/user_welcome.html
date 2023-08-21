@@ -1,3 +1,7 @@
+{% if user.is_staff or user.is_superuser %}
+  <h4><a href="{% url 'home-management' %}">Go to app-management</a></h4>
+{% endif %}
+
 {% if fav_artists %}
 <div class="fav-artist">
   <h3>This are your favorited artists</h3>

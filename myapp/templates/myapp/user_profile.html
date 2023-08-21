@@ -1,14 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %}{{profile.name}}{% endblock title %}
+{% block title %}{{user.name}}{% endblock title %}
 
 {% block content %}
 <div class="main-container">
     <div class="profile-name">
-        <h2>{{profile.name}}</h2>
-    </div>
-    <div>
-        <img src="{{profile.profile_pic.url}}" alt="">
+        <h2>{{user.name}}</h2>
     </div>
 </div>
 {% endblock content %}

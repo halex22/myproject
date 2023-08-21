@@ -6,6 +6,7 @@
         required
         data-mdb-showcounter="true"
         class="form-control {% if field.errors %}is-invalid{% endif %}"
+        {% if field.value %} value="{{ field.value|title }}" {% endif %}
     >
     <label for="{{ field.id_for_label }}">{{field.label}}</label>
     <br>
